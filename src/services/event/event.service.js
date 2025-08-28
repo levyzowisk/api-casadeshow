@@ -21,9 +21,13 @@ async function findById(id) {
     return await eventRepository.findById(id);
 }
 
+async function createEvent() {
+    
+}
 
 
 
 module.exports = {
-    find
+    find,
+    findById
 }
