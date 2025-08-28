@@ -15,6 +15,12 @@ async function remove(id) {
     await eventRepository.remove(id);
 }
 
+async function findById(id) {
+    
+    id === Number(id) ? id : new BaseError(404)
+    
+    return await eventRepository.findById(id);
+}
 
 async function isExistsEvent(id) {
     if(! await eventRepository.findById(id)) {
@@ -29,5 +35,5 @@ async function create(data, idSector) {
 }
 
 module.exports = {
-    find, remove, create
+    find, remove, create, findById
 }
