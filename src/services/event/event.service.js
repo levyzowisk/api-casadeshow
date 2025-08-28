@@ -17,7 +17,7 @@ async function remove(id) {
 
 async function findById(id) {
     
-    id === Number(id) ? id : new Error('oi')  
+    id === Number(id) ? id : new BaseError(404)
     
     return await eventRepository.findById(id);
 }
@@ -35,5 +35,5 @@ async function create(data, idSector) {
 }
 
 module.exports = {
-    find, remove, create
+    find, remove, create, findById
 }
