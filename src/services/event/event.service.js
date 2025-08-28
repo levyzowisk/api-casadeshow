@@ -1,17 +1,18 @@
 const eventRepository = require('../../repositories/event/event.repository');
+const { findByID: findSectorByID } = require('../../repositories/sector/sector.repository');
+const {BaseError} = require('../../utils/BaseError');
 
 async function find(take, skip) {
-    console.log(take);
-    console.log(skip);
-    
     
     take === undefined ? take = 5 : take;
     skip === undefined ? skip = 0 : skip;
     
-    console.log(take);
-    console.log(skip);
-    
-    return await eventRepository.find(take, skip); 
+    return await eventRepository.find(take, skip);
+}
+
+async function remove(id) {
+    await isExistsEvent(id);
+    await eventRepository.remove(id);
 }
 
 async function findById(id) {
@@ -21,13 +22,18 @@ async function findById(id) {
     return await eventRepository.findById(id);
 }
 
-async function createEvent() {
+async function isExistsEvent(id) {
+    if(! await eventRepository.findById(id)) {
+        throw new BaseError(404 ,'Evento inexistente');
+    }
     
 }
 
-
+async function create(data, idSector) {
+    await findSectorByID(idSector);
+    await eventRepository.create(data);
+}
 
 module.exports = {
-    find,
-    findById
+    find, remove, create
 }
