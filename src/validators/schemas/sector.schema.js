@@ -6,7 +6,7 @@ const createEventSchema = Joi.object({
     capacity: Joi.number().required(),
     description: Joi.string().optional(),
     status: Joi.string().valid("CANCELED","EXHAUSTED").required(),
-    is_visible: Joi.boolean().required()
+    is_visible: Joi.boolean().required(),
 })
 
 module.exports = {
