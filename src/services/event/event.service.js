@@ -11,7 +11,6 @@ async function find(take, skip) {
 }
 
 async function remove(id) {
-    await isExistsEvent(id);
     await eventRepository.remove(id);
 }
 
