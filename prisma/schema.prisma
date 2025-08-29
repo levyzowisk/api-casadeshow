@@ -59,7 +59,7 @@ enum type_user {
 model user {
   id              String  @id @default(uuid())
   name            String  @db.VarChar(110)
-  email           String  
+  email           String  @unique()
   password        String
   telephone       String  @db.VarChar(11)
   type_user       type_user
