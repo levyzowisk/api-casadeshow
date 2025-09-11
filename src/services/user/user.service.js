@@ -1,6 +1,7 @@
 const { create: createRepo, findByEmail } = require('../../repositories/user/user.repository');
 const {BaseError} =  require('../../utils/BaseError');
 const { hashPassword } = require('../../utils/bcrypt');
+const { generateToken } = require('../../utils/jwt');
 
 async function create(data) {
     if(await findByEmail(data.email)) {
@@ -11,8 +12,11 @@ async function create(data) {
     
     data.password = passwordHashed;
 
-    return await createRepo(data);
+    await createRepo(data);
+
 }
+
+
 
 module.exports = {
     create, 
