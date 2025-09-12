@@ -17,7 +17,6 @@ async function create(data) {
 }
 
 
-
 module.exports = {
     create, 
 }
