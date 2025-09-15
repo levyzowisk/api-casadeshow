@@ -8,7 +8,6 @@ function validateCreateEvent (req, res, next) {
         return next(new BaseError(400, error.details[0].message));
     }
 
-
     next();
 }
 

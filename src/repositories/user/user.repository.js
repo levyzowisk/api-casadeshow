@@ -13,9 +13,6 @@ async function findByEmail(email) {
     return await prisma.user.findUnique({
         where: {
             email
-        },
-        omit: {
-            password: true
         }
     });
 }
