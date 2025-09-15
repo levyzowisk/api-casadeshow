@@ -5,7 +5,7 @@ function validateLogin (req, res, next) {
     const {error} = loginSchema.validate(req.body);
     
     if(error) {
-        return next(new BaseError(400, error.details[0].message))
+        return next(new BaseError(400, error.details[0].message));
     }
 
     next();

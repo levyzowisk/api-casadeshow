@@ -1,3 +1,4 @@
+const { TokenExpiredError } = require('jsonwebtoken');
 const {BaseError} = require('../utils/BaseError');
 const { PrismaClientKnownRequestError } = require('@prisma/client/runtime/library')
 const handlerError = (err, req, res, next) =>  {
@@ -17,6 +18,10 @@ const handlerError = (err, req, res, next) =>  {
             return
         }
 
+    }
+    if(err instanceof TokenExpiredError) {
+        res.status(401).json('Token inválido');
+        return
     }
     
     
