@@ -17,7 +17,19 @@ async function findByEmail(email) {
     });
 }
 
+async function updatePassword(email, newPassword) {
+    return await prisma.user.update({
+        where: {
+            email
+        },
+         data: {
+            password: newPassword
+         }
+    })
+}
+
 module.exports = {
     create,
     findByEmail,
+    updatePassword,
 }
