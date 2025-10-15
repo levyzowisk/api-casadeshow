@@ -69,6 +69,7 @@ classDiagram
         int capacidade_total
         enum status "RASCUNHO | PUBLICADO | FINALIZADO | CANCELADO"
         int id_admin FK
+        int id_artista FK
     }
 
     class SETORES {
@@ -99,9 +100,14 @@ classDiagram
         enum status_pagamento "PENDENTE | PAGO | CANCELADO"
     }
 
-    %% ======================
-    %% RELACIONAMENTOS
-    %% ======================
+    class ARTISTAS {
+        int id_artista PK
+        string nome
+        string genero
+        text descricao
+        string contato
+    }
+    
 
     USUARIOS <|--o EVENTOS 
     EVENTOS <|--o SETORES 
@@ -109,4 +115,5 @@ classDiagram
     USUARIOS <|--o INGRESSOS 
     EVENTOS <|--o VENDAS 
     INGRESSOS <|--o VENDAS
+    EVENTOS <|--o ARTISTAS
 ```
