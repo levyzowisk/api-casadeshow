@@ -16,24 +16,28 @@ datasource db {
 enum event_status {
   CANCELED
   EXHAUSTED
+  PUBLISHED
+  FINISHED
+  DRAFT 
 }
 
 model event {
   id              String  @id @default(uuid())
   name            String  @db.VarChar(110)
-  date_start      DateTime 
+  date_start      DateTime
+  date_end        DateTime
   capacity        Int
   description     String?  @db.VarChar(255)
   status          event_status
   is_visible      Boolean  @default(true)
 
-  sector_id       String
-
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt() @default(now())
-
-  sector          sector   @relation(fields: [sector_id], references: [id])
   
+  sector sector[]
+  sale sale[]
+
+  event_artist  event_artist[]
 }
 
 model sector {
@@ -41,13 +45,16 @@ model sector {
   name            String  @db.VarChar(30)
   description     String?  @db.VarChar(255)
   price           Decimal 
-  quantity_total  Int
+  capacity        Int
+  service_charge  Decimal  
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt() @default(now())
 
+  event_id        String  
+
+  event           event   @relation(fields: [event_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ticket          ticket[]
-  event           event[]
 
 }
 
@@ -67,24 +74,103 @@ model user {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt() @default(now())
 
-  ticket          ticket[]
+
+  sale sale[]
+}
+
+enum status_ticket {
+  AVAILABLE
+  SOLD
+  CHECKIN
 }
 
 model ticket {
   id              String  @id @default(uuid())
-  price_pay       Decimal
-  checkin         Boolean
-  user_id         String
+  code_qr         String
+
+  sale_id          String
   sector_id       String
+  status          status_ticket
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt() @default(now())
 
-  user            user     @relation(fields: [user_id], references: [id])
-  sector          sector   @relation(fields: [sector_id], references: [id])
+  sector          sector   @relation(fields: [sector_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sale            sale     @relation(fields: [sale_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
 }
 
+model artist {
+  id              String    @id @default(uuid())
+  name            String    
+  description     String?   @db.VarChar(255)
+  contact         String  
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt() @default(now()) 
+
+  event_artist  event_artist[]
+
+}
+
+enum type_coupons {
+  PERCENTAGE
+  FIXED
+}
+
+model coupons {
+  id              String    @id @default(uuid())
+  code            String
+  type            type_coupons
+  price           Decimal
+  expiration_date DateTime
+  usage_limit     Int
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt() @default(now()) 
+
+  sale sale[]
+
+}
+
+enum payment_method {
+  CARD
+  PIX
+}
+
+enum status_payment {
+  PENDENT
+  PAID
+  CANCELED
+}
+
+model sale {
+  id              String    @id @default(uuid())
+  
+  user_id         String
+  event_id        String
+  coupon_id       String?
+
+  sale_date       DateTime
+  price_total     Decimal
+  payment_method  payment_method
+  status_payment  status_payment
 
 
+  coupons coupons? @relation(fields: [coupon_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event event      @relation(fields: [event_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user  user        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
 
+  ticket ticket[]
+}
+
+model event_artist {
+  event_id  String
+  artist_id String
+
+  event   event     @relation(fields: [event_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artist  artist  @relation(fields: [artist_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([artist_id, event_id])
+}
