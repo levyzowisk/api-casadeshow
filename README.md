@@ -49,71 +49,84 @@ src/
 ## Banco de dados
 ```mermaid
 classDiagram
-    class USUARIOS {
-        int id_usuario PK
-        string nome
+    class event {
+        string id PK
+        string name
+        DateTime date_start
+        DateTime date_end
+        int capacity
+        string description
+        event_status status
+        bool is_visible
+    }
+
+    class sector {
+        string id PK
+        string name
+        string description
+        Decimal price
+        int capacity
+        Decimal service_charge
+        string event_id FK
+    }
+
+    class user {
+        string id PK
+        string name
         string email
-        string senha
-        enum tipo_usuario "ADMIN | CLIENTE"
-        datetime data_cadastro
+        string password
+        string telephone
+        type_user type_user
     }
 
-    class EVENTOS {
-        int id_evento PK
-        string nome_evento
-        text descricao
-        date data_evento
-        time horario_inicio
-        time horario_fim
-        string local
-        int capacidade_total
-        enum status "RASCUNHO | PUBLICADO | FINALIZADO | CANCELADO"
-        int id_admin FK
-        int id_artista FK
+    class ticket {
+        string id PK
+        string code_qr
+        string sale_id FK
+        string sector_id FK
+        status_ticket status
     }
 
-    class SETORES {
-        int id_setor PK
-        string nome_setor
-        int capacidade
-        decimal preco
-        decimal taxa_servico
-        int id_evento FK
+    class artist {
+        string id PK
+        string name
+        string description
+        string contact
     }
 
-    class INGRESSOS {
-        int id_ingresso PK
-        int id_usuario FK
-        int id_setor FK
-        int id_evento FK
-        string codigo_qr
-        enum status "DISPONIVEL | VENDIDO | CHECKIN"
+    class coupons {
+        string id PK
+        string code
+        type_coupons type
+        Decimal price
+        DateTime expiration_date
+        int usage_limit
     }
 
-    class VENDAS {
-        int id_venda PK
-        int id_ingresso FK
-        int id_evento FK
-        datetime data_venda
-        decimal valor_total
-        enum metodo_pagamento "CARTAO | PIX | BOLETO"
-        enum status_pagamento "PENDENTE | PAGO | CANCELADO"
+    class sale {
+        string id PK
+        string user_id FK
+        string event_id FK
+        string coupon_id FK
+        DateTime sale_date
+        Decimal price_total
+        payment_method payment_method
+        status_payment status_payment
     }
 
-    class ARTISTAS {
-        int id_artista PK
-        string nome
-        string genero
-        text descricao
-        string contato
+    class event_artist {
+        string event_id FK
+        string artist_id FK
     }
+
+   
+    event "1" --* "many" sector
+    event "1" --* "many" sale
+    user "1" --* "many" sale
+    sector "1" --* "many" ticket
+    sale "1" --* "many" ticket
+    sale "many" o-- "1" coupons
     
-
-    USUARIOS <|--o EVENTOS 
-    EVENTOS <|--o SETORES 
-    SETORES <|--o INGRESSOS 
-    USUARIOS <|--o INGRESSOS 
-    EVENTOS <|--o VENDAS 
-    INGRESSOS <|--o VENDAS
-    EVENTOS <|--o ARTISTAS
+    event "1" --* "many" event_artist
+    artist "1" --* "many" event_artist
 ```
