@@ -4,6 +4,7 @@ const example = require('./src/routes/example');
 const eventRoute = require('./src/routes/event/event.route');
 const userRoute = require('./src/routes/user/user.route');
 const authRoute = require('./src/routes/auth/auth.route');
+const artistRoute = require('./src/routes/artist/artist.route')
 const handlerError = require('./src/middleware/error');
 const port = 3000;
 require('dotenv').config();
@@ -15,7 +16,7 @@ app.use('/api', example.router);
 app.use('/api/events', eventRoute.router);
 app.use('/api/users', userRoute.router);
 app.use('/api/auths', authRoute.router);
-app.use('api/artists')
+app.use('/api/artists', artistRoute.router);
 app.use(handlerError);
 
 app.listen(port, () => {
