@@ -12,9 +12,10 @@ require('dotenv').config();
 app.use(express.json());
 
 app.use('/api', example.router);
-app.use('/api/event', eventRoute.router);
-app.use('/api/user', userRoute.router);
-app.use('/api/auth', authRoute.router);
+app.use('/api/events', eventRoute.router);
+app.use('/api/users', userRoute.router);
+app.use('/api/auths', authRoute.router);
+app.use('api/artists')
 app.use(handlerError);
 
 app.listen(port, () => {
