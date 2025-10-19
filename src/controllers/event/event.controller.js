@@ -6,6 +6,8 @@ async function find(req, res, next) {
 }
 
 async function findById(req, res, next) {
+    console.log(req.params.id);
+    
      const data = await eventService.findById(req.params.id);
      res.status(200).json(data);
 }

@@ -16,10 +16,12 @@ async function remove(id) {
 }
 
 async function findById(id) {
-    
-    id === Number(id) ? id : new BaseError(404)
-    
-    return await eventRepository.findById(id);
+
+    const event = await eventRepository.findById(id);
+    if(!event) {
+        throw new BaseError(404 ,'Evento inexistente');
+    }
+    return event;
 }
 
 async function isExistsEvent(id) {
