@@ -1,3 +1,4 @@
+const { findArtistsById } = require('../../repositories/artist/artist.repository');
 const eventRepository = require('../../repositories/event/event.repository');
 const { findByID: findSectorByID } = require('../../repositories/sector/sector.repository');
 const {BaseError} = require('../../utils/BaseError');
@@ -22,15 +23,21 @@ async function findById(id) {
 }
 
 async function isExistsEvent(id) {
-    if(! await eventRepository.findById(id)) {
+    if(!await eventRepository.findById(id)) {
         throw new BaseError(404 ,'Evento inexistente');
     }
     
 }
 
-async function create(data, idSector) {
-    await findSectorByID(idSector);
-    await eventRepository.create(data);
+async function create(data) {
+    const {sectors, artistIds, ...event} = data
+    const commomId = await findArtistsById(artistIds);
+
+    if(commomId.length !== artistIds.length) {
+        throw new BaseError(400, "Artista não existente");
+    }
+
+    return await eventRepository.create(event, sectors, artistIds);
 }
 
 module.exports = {
