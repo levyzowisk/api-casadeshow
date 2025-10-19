@@ -13,7 +13,13 @@ async function findArtistsById(ids) {
         }
     })
 }
+
+async function findArtists() {
+    return await prisma.artist.findMany();
+}
+
 module.exports = {
     create,
-    findArtistsById
+    findArtistsById,
+    findArtists
 }

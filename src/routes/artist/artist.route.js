@@ -5,7 +5,8 @@ const artistController = require('../../controllers/artist/artist.controller');
 const {checkBody} = require('../../middleware/checkBody');
 const { validateCreateArtist } = require('../../validators/artist.validator');
 
-router.post('/', checkBody, validateCreateArtist, artistController.createArtist)
+router.post('/', checkBody, validateCreateArtist, artistController.createArtist);
+router.get('/', artistController.findArtists);
 
 module.exports = {
     router
