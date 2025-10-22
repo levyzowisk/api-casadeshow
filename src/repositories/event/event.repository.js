@@ -19,6 +19,10 @@ async function findById(id) {
     return await prisma.event.findUnique({
         where: {
             id
+        },
+        include: {
+            sector: true,
+            event_artist: {omit: {event_id: true}}
         }
     });
 }
