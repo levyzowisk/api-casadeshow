@@ -6,8 +6,6 @@ async function find(req, res, next) {
 }
 
 async function findById(req, res, next) {
-    console.log(req.params.id);
-    
      const data = await eventService.findById(req.params.id);
      res.status(200).json(data);
 }
@@ -22,11 +20,15 @@ async function create(req,res, next) {
     res.status(200).json(event);
 }
 
-
+async function update(req, res, next) {
+    const eventUpdated = await eventService.update(req.params.id, req.body);
+    res.status(200).json(eventUpdated);
+}
 
 module.exports ={
     find,
     remove,
     create,
-    findById
+    findById,
+    update
 }

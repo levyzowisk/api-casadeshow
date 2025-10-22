@@ -35,6 +35,11 @@ async function create(data) {
     return await eventRepository.create(event, sectors, artistIds);
 }
 
+async function update(id, data) {
+    await findById(id);
+    return await eventRepository.update(id, data);
+}
+
 module.exports = {
-    find, remove, create, findById
+    find, remove, create, findById, update
 }

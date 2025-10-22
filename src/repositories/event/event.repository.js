@@ -48,9 +48,19 @@ async function create(event, sectors, artistIds) {
     })
 }
 
+async function update(id, data) {
+    return await prisma.event.update({
+        where: {
+            id
+        },
+        data
+    })
+}
+
 module.exports = {
     find,
     remove,
     findById,
-    create
+    create,
+    update
 }
