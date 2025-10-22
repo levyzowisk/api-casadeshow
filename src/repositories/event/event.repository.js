@@ -23,11 +23,25 @@ async function findById(id) {
     });
 }
 
-async function create(data, idSector) {
-    return await prisma.event.create({data: {
-        sector_id: idSector,
-        ...data
-    }})
+async function create(event, sectors, artistIds) {
+    return await prisma.event.create({
+        data: {
+            ...event,
+            sector: {
+                create: sectors,
+            },
+            event_artist: {
+                create: artistIds.map(idDoArtista => ({
+                artist: {
+                    connect: {
+                        id: idDoArtista,
+                    },
+                },
+          })),
+            }
+        }
+
+    })
 }
 
 module.exports = {

@@ -16,7 +16,8 @@ async function remove(req, res, next) {
 }
 
 async function create(req,res, next) {
-    await eventService.create(req.body, req.params.idSector);
+    const event = await eventService.create(req.body);
+    res.status(200).json(event);
 }
 
 
