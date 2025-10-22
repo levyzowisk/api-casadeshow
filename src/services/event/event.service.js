@@ -24,13 +24,6 @@ async function findById(id) {
     return event;
 }
 
-async function isExistsEvent(id) {
-    if(!await eventRepository.findById(id)) {
-        throw new BaseError(404 ,'Evento inexistente');
-    }
-    
-}
-
 async function create(data) {
     const {sectors, artistIds, ...event} = data
     const commomId = await findArtistsById(artistIds);
