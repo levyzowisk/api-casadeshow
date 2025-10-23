@@ -1,5 +1,5 @@
 const {BaseError} = require('../utils/BaseError');
-const {createArtistSchema} = require('./schemas/artist.schema');
+const {createArtistSchema, updateArtistSchema} = require('./schemas/artist.schema');
 
 function validateCreateArtist(req, res, next) {
     const {error} = createArtistSchema.validate(req.body);
@@ -11,6 +11,16 @@ function validateCreateArtist(req, res, next) {
     next();
 }
 
+function validateUpdateArtist(req, res, next) {
+    const {error} =  updateArtistSchema.validate(req.body);
+
+    if(error) {
+        return next(new BaseError(400, error.details[0].message));
+    }
+    
+    next();
+}
 module.exports = {
-    validateCreateArtist
+    validateCreateArtist,
+    validateUpdateArtist,
 }
