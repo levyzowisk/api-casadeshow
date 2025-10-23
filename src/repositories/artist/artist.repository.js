@@ -18,8 +18,27 @@ async function findArtists() {
     return await prisma.artist.findMany();
 }
 
+async function findById(id) {
+    return await prisma.artist.findUnique({
+        where: {
+            id
+        }
+    })
+} 
+
+async function update(id, data) {
+    return await prisma.artist.update({
+        where: {
+            id
+        },
+        data
+    })
+}
+
 module.exports = {
     create,
     findArtistsById,
-    findArtists
+    findArtists,
+    update,
+    findById
 }
