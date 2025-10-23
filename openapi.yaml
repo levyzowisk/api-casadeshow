@@ -1,0 +1,176 @@
+openapi: 3.0.0
+info:
+  title: API Casa de Show
+  description: API para gerenciamento de eventos, artistas e usuários.
+  version: 1.0.0
+  contact:
+    name: Iasmin Oliveira
+    email: exemplo@seudominio.com
+    url: https://github.com/levyzowisk/api-casadeshow
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local de desenvolvimento
+
+tags:
+  - name: Events
+    description: Rotas relacionadas a eventos
+  - name: Users
+    description: Rotas de gerenciamento de usuários
+  - name: Auths
+    description: Rotas de autenticação e login
+  - name: Artists
+    description: Rotas relacionadas a artistas
+
+paths:
+  /api/events:
+    get:
+      tags: [Events]
+      summary: Lista todos os eventos
+      responses:
+        200:
+          description: Lista de eventos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+    post:
+      tags: [Events]
+      summary: Cria um novo evento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        201:
+          description: Evento criado com sucesso
+
+  /api/users:
+    get:
+      tags: [Users]
+      summary: Lista todos os usuários
+      responses:
+        200:
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags: [Users]
+      summary: Cadastra um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: Usuário criado com sucesso
+
+  /api/auths/login:
+    post:
+      tags: [Auths]
+      summary: Realiza login do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: usuario@email.com
+                password:
+                  type: string
+                  example: senha123
+      responses:
+        200:
+          description: Login realizado com sucesso (token JWT retornado)
+        401:
+          description: Credenciais inválidas
+
+  /api/artists:
+    get:
+      tags: [Artists]
+      summary: Lista todos os artistas
+      responses:
+        200:
+          description: Lista de artistas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artist'
+    post:
+      tags: [Artists]
+      summary: Adiciona um novo artista
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artist'
+      responses:
+        201:
+          description: Artista criado com sucesso
+
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Festival de Rock
+        date:
+          type: string
+          format: date
+          example: 2025-12-05
+        location:
+          type: string
+          example: Casa de Show Fortaleza
+        artistId:
+          type: integer
+          example: 3
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Iasmin Oliveira
+        email:
+          type: string
+          example: iasmin@email.com
+        password:
+          type: string
+          example: senha123
+
+    Artist:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Banda Som Livre
+        genre:
+          type: string
+          example: Rock
