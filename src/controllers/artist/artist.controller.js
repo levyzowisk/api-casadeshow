@@ -10,13 +10,7 @@ async function findArtists(req, res, next) {
     res.status(200).json(artists);
 }   
 
-async function update(req, res, next) {
-    const artists = await artistService.update(req.params.id, req.body);
-    res.status(200).json(artists);
-}
-
 module.exports = {
     createArtist,
-    findArtists,
-    update,
+    findArtists
 }
