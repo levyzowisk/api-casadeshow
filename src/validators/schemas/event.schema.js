@@ -20,6 +20,18 @@ const createEventSchema = Joi.object({
     artistIds: Joi.array()
 })
 
+
+const updateEventSchema = Joi.object({
+    name: Joi.string().optional(),
+    date_start: Joi.date().optional(),
+    date_end: Joi.date().optional(),
+    capacity: Joi.number().optional(),
+    description: Joi.string().optional(),
+    status: Joi.string().valid("CANCELED","EXHAUSTED", "PUBLISHED", "FINISHED", "DRAFT").optional(),
+    is_visible: Joi.boolean().optional()
+})
+
 module.exports = {
-    createEventSchema
+    createEventSchema,
+    updateEventSchema
 }
