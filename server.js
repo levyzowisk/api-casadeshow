@@ -27,6 +27,13 @@ app.use('/api/sectors', sectorRoute.router);
 app.use(handlerError);
 
 
+if (process.env.NODE_ENV !== 'test') {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log('App listening on port: ' + port);
+  });
+}
+
 app.listen(port, () => {
     console.log("App listening on port: " + port);
 });
