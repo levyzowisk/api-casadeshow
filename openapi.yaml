@@ -3,6 +3,14 @@ info:
   title: API Casa de Show
   description: API para gerenciamento de eventos, artistas e usuários.
   version: 1.0.0
+  contact:
+    name: Iasmin Oliveira
+    email: exemplo@seudominio.com
+    url: https://github.com/levyzowisk/api-casadeshow
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local de desenvolvimento
 
 tags:
   - name: Events
@@ -19,20 +27,6 @@ paths:
     get:
       tags: [Events]
       summary: Lista todos os eventos
-      description: Retorna uma lista de eventos com suporte a paginação.
-      parameters:
-        - in: query
-          name: take
-          schema:
-            type: integer
-            example: 5
-          description: Quantos registros retornar
-        - in: query
-          name: skip
-          schema:
-            type: integer
-            example: 0
-          description: Quantos registros pular antes de listar
       responses:
         200:
           description: Lista de eventos retornada com sucesso
@@ -50,69 +44,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateEvent'
+              $ref: '#/components/schemas/Event'
       responses:
         201:
           description: Evento criado com sucesso
-        400:
-          description: Artista não existente ou corpo inválido
-
-  /api/events/{id}:
-    get:
-      tags: [Events]
-      summary: Busca um evento pelo ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: ID do evento
-      responses:
-        200:
-          description: Evento encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Event'
-        404:
-          description: Evento inexistente
-    patch:
-      tags: [Events]
-      summary: Atualiza um evento existente
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: ID do evento
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateEvent'
-      responses:
-        200:
-          description: Evento atualizado com sucesso
-        404:
-          description: Evento inexistente
-    delete:
-      tags: [Events]
-      summary: Remove um evento existente
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: ID do evento
-      responses:
-        204:
-          description: Evento removido com sucesso
-        404:
-          description: Evento inexistente
 
   /api/users:
     get:
@@ -130,466 +65,112 @@ paths:
     post:
       tags: [Users]
       summary: Cadastra um novo usuário
-      description: Cria um novo usuário na base de dados após validar os campos obrigatórios e verificar se o e-mail já está cadastrado.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUser'
-            example:
-              name: Iasmin Oliveira
-              email: iasmin.oliveira@example.com
-              password: senhaSegura123
-              telephone: "85988887777"
-              type_user: CLIENT
+              $ref: '#/components/schemas/User'
       responses:
         201:
           description: Usuário criado com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              example:
-                id: "u123e456"
-                name: Iasmin Oliveira
-                email: iasmin.oliveira@example.com
-                telephone: "85988887777"
-                type_user: CLIENT
-                createdAt: "2025-10-23T18:30:00Z"
-                updatedAt: "2025-10-23T18:30:00Z"
-        400:
-          description: Corpo da requisição inválido
-        409:
-          description: Usuário já cadastrado
-          
-  /api/auth/login:
+
+  /api/auths/login:
     post:
       tags: [Auths]
       summary: Realiza login do usuário
-      description: |
-        Autentica o usuário a partir do **e-mail** e **senha**.  
-        Retorna um token JWT que deve ser usado no header `Authorization: Bearer <token>` para acessar rotas protegidas.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - email
-                - password
               properties:
                 email:
                   type: string
-                  example: maria.silva@email.com
+                  example: usuario@email.com
                 password:
                   type: string
-                  format: password
                   example: senha123
       responses:
-        "200":
-          description: Login bem-sucedido — retorna o token JWT de acesso.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  accessToken:
-                    type: string
-                    description: Token JWT válido por um período determinado.
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        "400":
-          description: Credenciais inválidas — senha incorreta.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Credenciais inválidas
-        "409":
-          description: Usuário não cadastrado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Usuário não cadastrado!
-
-  /api/auth/change-password:
-    patch:
-      tags: [Auths]
-      summary: Altera a senha de um usuário
-      description: |
-        Permite que um usuário autenticado altere sua senha.  
-        É necessário enviar o token JWT no header `Authorization` e informar a senha atual e a nova senha.
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - oldPassword
-                - newPassword
-              properties:
-                email:
-                  type: string
-                  example: maria.silva@email.com
-                oldPassword:
-                  type: string
-                  format: password
-                  example: senha123
-                newPassword:
-                  type: string
-                  format: password
-                  example: novaSenhaSegura456
-      responses:
-        "200":
-          description: Senha alterada com sucesso.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Senha atualizada com sucesso!
-        "400":
-          description: Senha atual incorreta.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Credenciais inválidas
-        "409":
-          description: Usuário não cadastrado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Usuário não cadastrado!
+        200:
+          description: Login realizado com sucesso (token JWT retornado)
+        401:
+          description: Credenciais inválidas
 
   /api/artists:
-    post:
-      tags: [Artists]
-      summary: Cadastra um novo artista
-      description: |
-        Cria um novo registro de artista no sistema.  
-        É necessário enviar todos os campos obrigatórios no corpo da requisição.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - name
-                - genre
-                - country
-              properties:
-                name:
-                  type: string
-                  description: Nome completo ou nome artístico.
-                  example: Jorge & Mateus
-                genre:
-                  type: string
-                  description: Gênero musical principal.
-                  example: Sertanejo Universitário
-                country:
-                  type: string
-                  description: País de origem.
-                  example: Brasil
-                description:
-                  type: string
-                  description: Breve biografia ou informações adicionais sobre o artista.
-                  example: Dupla brasileira formada em 2005, conhecida por sucessos no sertanejo universitário.
-                image_url:
-                  type: string
-                  format: uri
-                  description: URL da imagem do artista.
-                  example: https://exemplo.com/imagens/jorge-mateus.jpg
-      responses:
-        "201":
-          description: Artista criado com sucesso.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: 8c4b91f0-7d1a-4b23-b6a8-4dbed3c43b6b
-                  name:
-                    type: string
-                    example: Jorge & Mateus
-                  genre:
-                    type: string
-                    example: Sertanejo Universitário
-                  country:
-                    type: string
-                    example: Brasil
-                  description:
-                    type: string
-                    example: Dupla brasileira formada em 2005, conhecida por sucessos no sertanejo universitário.
-                  image_url:
-                    type: string
-                    example: https://exemplo.com/imagens/jorge-mateus.jpg
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: 2025-10-23T18:40:00Z
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: 2025-10-23T18:40:00Z
-        "400":
-          description: Erro de validação — dados inválidos ou incompletos.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Campos obrigatórios ausentes.
-        "409":
-          description: Artista já cadastrado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Artista já existe no sistema.
-
     get:
       tags: [Artists]
       summary: Lista todos os artistas
-      description: |
-        Retorna uma lista com todos os artistas cadastrados no sistema.
       responses:
-        "200":
-          description: Lista de artistas retornada com sucesso.
+        200:
+          description: Lista de artistas
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: 2d931510-d99f-494a-8c67-87feb05e1594
-                    name:
-                      type: string
-                      example: Ana Castela
-                    genre:
-                      type: string
-                      example: AgroPop
-                    country:
-                      type: string
-                      example: Brasil
-                    description:
-                      type: string
-                      example: Cantora brasileira conhecida como “Boiadeira”, destaque na cena sertaneja atual.
-                    image_url:
-                      type: string
-                      example: https://exemplo.com/imagens/ana-castela.jpg
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: 2025-07-14T14:32:00Z
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      example: 2025-07-14T14:32:00Z
-        "500":
-          description: Erro interno ao buscar artistas.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Erro ao buscar lista de artistas.
+                  $ref: '#/components/schemas/Artist'
+    post:
+      tags: [Artists]
+      summary: Adiciona um novo artista
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artist'
+      responses:
+        201:
+          description: Artista criado com sucesso
+
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        name: { type: string }
-        email: { type: string }
-        password: { type: string }
-        telephone: { type: string }
-        type_user: { type: string, enum: [ADMIN, CLIENT] }
-
-    UserRegister:
-      allOf:
-        - $ref: '#/components/schemas/User'
-
-    UserLogin:
-      type: object
-      properties:
-        email: { type: string }
-        password: { type: string }
-
-    CreateUser:
-      type: object
-      required:
-        - name
-        - email
-        - password
-        - telephone
-        - type_user
-      properties:
-        name:
-          type: string
-          example: "Iasmin Oliveira"
-        email:
-          type: string
-          format: email
-          example: "iasmin@email.com"
-        password:
-          type: string
-          format: password
-          example: "senha123"
-        telephone:
-          type: string
-          example: "85988887777"
-        type_user:
-          type: string
-          enum: [ADMIN, CLIENT]
-          example: "CLIENT"
-
-    UpdateUser:
-      type: object
-      properties:
-        name:
-          type: string
-          example: "Iasmin O. Silva"
-        email:
-          type: string
-          format: email
-          example: "iasmin.oliveira@email.com"
-        telephone:
-          type: string
-          example: "85999998888"
-        password:
-          type: string
-          format: password
-          example: "novaSenha456"
-        type_user:
-          type: string
-          enum: [ADMIN, CLIENT]
-          example: "ADMIN"
-
     Event:
       type: object
       properties:
-        name: { type: string }
-        date_start: { type: string, format: date-time }
-        date_end: { type: string, format: date-time }
-        capacity: { type: integer }
-        description: { type: string }
-        status: { type: string, enum: [CANCELED, EXHAUSTED, PUBLISHED, FINISHED, DRAFT] }
-        is_visible: { type: boolean }
-
-    CreateEvent:
-      type: object
-      required:
-        - name
-        - date_start
-        - date_end
-        - capacity
-        - status
-      properties:
-        name:
-          type: string
-          example: "Festival de Música Fortaleza"
-        date_start:
-          type: string
-          format: date-time
-          example: "2025-11-10T20:00:00Z"
-        date_end:
-          type: string
-          format: date-time
-          example: "2025-11-12T02:00:00Z"
-        capacity:
+        id:
           type: integer
-          example: 3000
-        description:
-          type: string
-          example: "Evento com artistas locais e nacionais."
-        status:
-          type: string
-          enum: [CANCELED, EXHAUSTED, PUBLISHED, FINISHED, DRAFT]
-          example: "DRAFT"
-        is_visible:
-          type: boolean
-          example: true
-
-    UpdateEvent:
-      type: object
-      properties:
+          example: 1
         name:
           type: string
-          example: "Festival de Verão 2025"
-        date_start:
+          example: Festival de Rock
+        date:
           type: string
-          format: date-time
-          example: "2025-12-05T18:00:00Z"
-        date_end:
+          format: date
+          example: 2025-12-05
+        location:
           type: string
-          format: date-time
-          example: "2025-12-07T02:00:00Z"
-        description:
+          example: Casa de Show Fortaleza
+        artistId:
+          type: integer
+          example: 3
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
           type: string
-          example: "Atualização de data e nome do evento."
-        status:
+          example: Iasmin Oliveira
+        email:
           type: string
-          enum: [CANCELED, EXHAUSTED, PUBLISHED, FINISHED, DRAFT]
-          example: "PUBLISHED"
-        is_visible:
-          type: boolean
-          example: true
+          example: iasmin@email.com
+        password:
+          type: string
+          example: senha123
 
     Artist:
       type: object
       properties:
-        name: { type: string }
-        description: { type: string }
-        contact: { type: string }
-        
-    Sector:
-      type: object
-      properties:
-        name: { type: string }
-        description: { type: string }
-        price: { type: number, format: float }
-        capacity: { type: integer }
-        service_charge: { type: number, format: float }
-        event_id: { type: string }
-
-    Ticket:
-      type: object
-      properties:
-        code_qr: { type: string }
-        status: { type: string, enum: [AVAILABLE, SOLD, CHECKIN] }
-        sector_id: { type: string }
-        sale_id: { type: string }    
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Banda Som Livre
+        genre:
+          type: string
+          example: Rock
