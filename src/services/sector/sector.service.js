@@ -1,5 +1,5 @@
-const sectorRepository =  require('../../repositories/sector/sector.repository')
-const { BaseError } = require('../../utils/BaseError')
+const sectorRepository =  require('../../repositories/sector/sector.repository');
+const { BaseError } = require('../../utils/BaseError');
 async function findByID(id) {
     await isExistsSector(id);
     return await sectorRepository.findByID(id);
@@ -16,7 +16,8 @@ async function update(id, data) {
     return await sectorRepository.update(id, data);
 }
 
+
 module.exports = {
     findByID,
-    update
+    update,
 }
