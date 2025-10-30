@@ -13,7 +13,12 @@ async function findById(code) {
         }
     })
 }
+
+async function find() {
+    return await prisma.coupons.findMany()
+}
 module.exports = {
     create,
-    findById
+    findById,
+    find
 }

@@ -5,6 +5,11 @@ async function create(req, res) {
     res.status(201).json(coupon);
 }
 
+async function find(req, res) {
+    const coupons = await couponService.find();
+    res.status(200).json(coupons);
+}
 module.exports = {
-    create
+    create,
+    find,
 }
