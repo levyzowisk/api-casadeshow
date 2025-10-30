@@ -120,7 +120,7 @@ enum type_coupons {
 
 model coupons {
   id              String    @id @default(uuid())
-  code            String
+  code            String    @unique
   type            type_coupons
   price           Decimal
   expiration_date DateTime
