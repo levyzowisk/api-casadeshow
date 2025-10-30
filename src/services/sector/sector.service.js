@@ -16,8 +16,13 @@ async function update(id, data) {
     return await sectorRepository.update(id, data);
 }
 
+async function find() {
+    return await sectorRepository.find();
+}
+
 
 module.exports = {
     findByID,
     update,
+    find
 }
