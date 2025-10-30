@@ -6,7 +6,8 @@ const userRoute = require('./src/routes/user/user.route');
 const authRoute = require('./src/routes/auth/auth.route');
 const artistRoute = require('./src/routes/artist/artist.route');
 const sectorRoute = require('./src/routes/sector/sector.route');
-const saleRoute = require('./src/routes/sale/sale.route')
+const saleRoute = require('./src/routes/sale/sale.route');
+const couponRoute = require('./src/routes/coupon/coupon.route');
 const handlerError = require('./src/middleware/error');
 const { createBullBoard } = require('@bull-board/api');
 const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
@@ -31,6 +32,7 @@ app.use('/api/auths', authRoute.router);
 app.use('/api/artists', artistRoute.router);
 app.use('/api/sectors', sectorRoute.router);
 app.use('/api/sales', saleRoute.router);
+app.use('/api/coupons', couponRoute.router);
 app.use(handlerError);
 
 const serverAdapter = new ExpressAdapter();
