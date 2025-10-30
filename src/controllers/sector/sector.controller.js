@@ -10,7 +10,14 @@ async function findById(req, res, next) {
     const sector= await sectorService.findByID(req.params.id);
     res.status(200).json(sector);
 }
+
+async function find(req, res) {
+    const sector = await sectorService.find();
+    res.status(200).json(sector);
+}
+
 module.exports = {
     update,
-    findById
+    findById,
+    find,
 }

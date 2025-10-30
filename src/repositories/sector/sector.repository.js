@@ -26,8 +26,13 @@ async function findSectorsByIds(ids) {
     })
 }
 
+
+async function find() {
+    return await prisma.sector.findMany();
+}
 module.exports = {
     findByID,
     update,
     findSectorsByIds,
+    find
 }
