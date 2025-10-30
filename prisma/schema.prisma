@@ -88,7 +88,7 @@ model ticket {
   id              String  @id @default(uuid())
   code_qr         String
 
-  sale_id          String
+  sale_id         String
   sector_id       String
   status          status_ticket
 

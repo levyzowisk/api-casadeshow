@@ -1,23 +1,29 @@
-# Define a versão do Docker Compose
 version: '3.8'
 
 services:
   
-  # 1. O serviço da sua API
   api:
     build: .
     ports:
       - "8080:3000"
+      - "5555:5555" 
     environment:
       PORT: 3000
-      # ATENÇÃO: Atualizamos a URL para usar o usuário 'root' e a senha
-      # definida em MYSQL_ROOT_PASSWORD abaixo.
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
       DATABASE_URL: ${DATABASE_URL}
+    
+    command: npm run nodemon
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./prisma:/app/prisma
+    
     depends_on:
       - db
+      - redis
     restart: unless-stopped
 
-  # 2. O serviço do Banco de Dados (MySQL)
   db:
     image: mysql:8.0
     ports:
@@ -30,6 +36,14 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
 
-# Define os volumes que o Docker vai gerenciar
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
 volumes:
   mysql-data:
+  redis-data:

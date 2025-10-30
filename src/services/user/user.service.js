@@ -1,4 +1,4 @@
-const { create: createRepo, findByEmail } = require('../../repositories/user/user.repository');
+const { create: createRepo, findByEmail, findByID: findByIDRepo } = require('../../repositories/user/user.repository');
 const {BaseError} =  require('../../utils/BaseError');
 const { hashPassword } = require('../../utils/bcrypt');
 const { generateToken } = require('../../utils/jwt');
@@ -16,8 +16,17 @@ async function create(data) {
 
 }
 
+async function findByID(id) {
+    const user = await findByIDRepo(id);
+    if(!user) {
+       throw new BaseError(404, 'Usuário não encontrado');
+    }
+    return user;
+}
+
 
 module.exports = {
     create, 
+    findByID
 }
 

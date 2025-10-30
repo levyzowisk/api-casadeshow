@@ -13,7 +13,21 @@ async function update(id, data) {
     })
 }
 
+async function findSectorsByIds(ids) {
+    return await prisma.sector.findMany({
+        where: {
+        id: {
+            in: ids
+        }  
+        },
+        select: {
+            id: true
+        }
+    })
+}
+
 module.exports = {
     findByID,
-    update
+    update,
+    findSectorsByIds
 }
