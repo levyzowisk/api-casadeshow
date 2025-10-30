@@ -28,8 +28,16 @@ async function updatePassword(email, newPassword) {
     })
 }
 
+async function findByID(id) {
+    return await prisma.user.findUnique({
+        where: {
+            id
+        }
+    })
+}
 module.exports = {
     create,
     findByEmail,
     updatePassword,
+    findByID
 }
