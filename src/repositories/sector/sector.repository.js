@@ -29,5 +29,5 @@ async function findSectorsByIds(ids) {
 module.exports = {
     findByID,
     update,
-    findSectorsByIds
+    findSectorsByIds,
 }

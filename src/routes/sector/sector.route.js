@@ -6,6 +6,7 @@ const { checkBody } = require('../../middleware/checkBody');
 const { validadeUpdateEvent } = require('../../validators/event.validator');
 
 router.patch('/:id', checkBody, validadeUpdateEvent, sectorController.update);
+router.get('/:id', sectorController.findById);
 
 module.exports = {
     router
