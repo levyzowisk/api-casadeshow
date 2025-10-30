@@ -11,12 +11,12 @@ const port = 3000;
 require('dotenv').config();
 
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs'); // 👈 Adiciona esta linha
-const swaggerDocument = YAML.load('./openapi.yaml'); // 👈 Carrega o arquivo YAML
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./openapi.yaml'); 
 
 app.use(express.json());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // 👈 Adiciona esta linha
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); 
 
 app.use('/api', example.router);
 app.use('/api/events', eventRoute.router);
@@ -26,13 +26,6 @@ app.use('/api/artists', artistRoute.router);
 app.use('/api/sectors', sectorRoute.router);
 app.use(handlerError);
 
-
-if (process.env.NODE_ENV !== 'test') {
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    console.log('App listening on port: ' + port);
-  });
-}
 
 app.listen(port, () => {
     console.log("App listening on port: " + port);
