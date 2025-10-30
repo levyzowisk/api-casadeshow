@@ -8,7 +8,7 @@ async function create(data) {
 }
 
 async function isExistsCouponCode(code) {
-    if(await couponRepository.findById(code)) {
+    if(await couponRepository.findByCode(code)) {
         throw new BaseError('404', 'Código de cupon já existente!');
     }
 }
@@ -16,7 +16,12 @@ async function isExistsCouponCode(code) {
 async function find() {
     return await couponRepository.find();
 }
+
+async function findById(id) {
+    return await couponRepository.findById(id);
+}
 module.exports = {
     create,
-    find
+    find,
+    findById
 }

@@ -6,7 +6,7 @@ async function create(data) {
     });
 }
 
-async function findById(code) {
+async function findByCode(code) {
     return await prisma.coupons.findUnique({
         where: {
             code
@@ -17,8 +17,18 @@ async function findById(code) {
 async function find() {
     return await prisma.coupons.findMany()
 }
+
+
+async function findById(id) {
+    return await prisma.coupons.findUnique({
+        where: {
+            id
+        }
+    })
+}
 module.exports = {
     create,
+    findByCode,
+    find,
     findById,
-    find
 }
