@@ -13,6 +13,10 @@ async function isExistsCouponCode(code) {
     }
 }
 
+async function find() {
+    return await couponRepository.find();
+}
 module.exports = {
-    create
+    create,
+    find
 }

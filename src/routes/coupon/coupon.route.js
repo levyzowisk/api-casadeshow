@@ -7,7 +7,7 @@ const { validateCreateCoupon } = require('../../validators/coupon.validator');
 
 
 router.post('/', checkBody, validateCreateCoupon, couponController.create);
-
+router.get('/', couponController.find);
 module.exports = {
     router
 }
