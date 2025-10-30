@@ -17,8 +17,9 @@ const port = 3000;
 require('dotenv').config();
 
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs'); 
+const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./openapi.yaml'); 
+
 app.use(express.json());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); 
@@ -36,7 +37,6 @@ const serverAdapter = new ExpressAdapter();
 serverAdapter.setBasePath('/admin/queues');
 
 createBullBoard({
-  // 2. Passe suas filas existentes para o painel
   queues: [
     new BullMQAdapter(queues.ticketSaleQueue),
     new BullMQAdapter(queues.emailNotificationQueue)
@@ -44,8 +44,7 @@ createBullBoard({
   serverAdapter: serverAdapter,
 });
 
-// 3. Proteja sua rota com um login e senha
-// (MUDE 'admin' e 'senha123' para algo seu!)
+
 app.use('/admin/queues', basicAuth({
     users: { 'admin': 'senha123' },
     challenge: true,
