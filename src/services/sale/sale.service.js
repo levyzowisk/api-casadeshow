@@ -3,6 +3,7 @@ const { getCachedSector, setCachedSector } = require("../../jobs/ticketSaleWorke
 const queue = require("../../lib/Queue");
 const { findByID: findByIDRepo, findSectorsByIds } = require("../../repositories/sector/sector.repository");
 const {BaseError} = require('../../utils/BaseError');
+const { findById: findByIdEvent } = require("../event/event.service");
 const { findByID: findByIDUser } = require("../user/user.service");
 
 async function createSale(data) {
@@ -12,6 +13,8 @@ async function createSale(data) {
         return item.sector_id;
     });
     const user = await findByIDUser(data.user_id);
+
+    await findByIdEvent(data.event_id);
 
     const reservations = [];
     const idsSectorDb = await findSectorsByIds(idsSector);
